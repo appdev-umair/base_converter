@@ -11,17 +11,21 @@ String decimalFraction(String decimal, int base) {
   String fracStr = "";
   String binDig = "";
   do {
-    frac = frac * 2;
+    frac = frac * base;
     fracStr = frac.toString();
     frac =
         double.parse(fracStr.substring(fracStr.indexOf('.'), fracStr.length));
-    binDig += fracStr.substring(0, fracStr.indexOf('.'));
+    String dig = fracStr.substring(0, fracStr.indexOf('.'));
+    if (base == 16) {
+      binDig += int.parse(dig).toRadixString(16).toUpperCase();
+    } else
+      binDig += dig;
     if (binDig.length == 10) {
       break;
     }
   } while (frac != 0);
-  String binWhole = int.parse(whole).toRadixString(2);
+  String binWhole = int.parse(whole).toRadixString(base).toUpperCase();
   String binDeci = binWhole + '.' + binDig;
 
-  return binaryFraction(binDeci, base);
+  return binDeci;
 }

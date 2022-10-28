@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'logic/binary.dart';
 import 'logic/decimal.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData.light(),
       home: Converter(),
     );
   }
@@ -31,7 +32,6 @@ class Converter extends StatefulWidget {
 }
 
 class _ConverterState extends State<Converter> {
-
   var octal = TextEditingController();
   var decimal = TextEditingController();
   var hexadecimal = TextEditingController();
@@ -44,114 +44,124 @@ class _ConverterState extends State<Converter> {
         title: Text("Converter"),
       ),
       body: Center(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                textAlign: TextAlign.center,
-                controller: binary,
-                decoration: InputDecoration(
-                  hintText: "Binary",
-                ),
-                onChanged: (value) {
-                  if (searchFunction(value, '.')) {
+          child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: binary,
+              decoration: InputDecoration(
+                hintText: "Binary",
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-1]*\.?[0-1]*')),
+              ],
+              onChanged: (value) {
+                if (searchFunction(value, '.')) {
+                  if (value[value.indexOf('.')] != value[value.length - 1]) {
                     octal.text = binaryFraction(value, 8);
                     decimal.text = binaryFraction(value, 10);
                     hexadecimal.text = binaryFraction(value, 16);
                   }
-                  else if (value == ""){
-                    octal.text = "";
-                    decimal.text = "";
-                    hexadecimal.text = "";
-                  }
-                  else {
-                    octal.text = binaryToOtherSystem(value, 8);
-                    decimal.text = binaryToOtherSystem(value, 10);
-                    hexadecimal.text = binaryToOtherSystem(value, 16);
-                  }
-                },
-              ),
-              TextField(
-                controller: octal,
-                onChanged: (value) {
-                  if (searchFunction(value, '.')) {
+                } else if (value == "") {
+                  octal.text = "";
+                  decimal.text = "";
+                  hexadecimal.text = "";
+                } else {
+                  octal.text = binaryToOtherSystem(value, 8);
+                  decimal.text = binaryToOtherSystem(value, 10);
+                  hexadecimal.text = binaryToOtherSystem(value, 16);
+                }
+              },
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: octal,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-7]*\.?[0-7]*')),
+              ],
+              onChanged: (value) {
+                if (searchFunction(value, '.')) {
+                  // if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = octalFraction(value, 2);
                     decimal.text = octalFraction(value, 10);
                     hexadecimal.text = octalFraction(value, 16);
-                  }
-                  else if (value == ""){
-                    binary.text = "";
-                    decimal.text = "";
-                    hexadecimal.text = "";
-                  }
-                  else {
-                    binary.text = octalToOtherSystem(value, 2);
-                    decimal.text = octalToOtherSystem(value, 10);
-                    hexadecimal.text = octalToOtherSystem(value, 16);
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: "Octal",
-                ),
+                  // }
+                } else if (value == "") {
+                  binary.text = "";
+                  decimal.text = "";
+                  hexadecimal.text = "";
+                } else {
+                  binary.text = octalToOtherSystem(value, 2);
+                  decimal.text = octalToOtherSystem(value, 10);
+                  hexadecimal.text = octalToOtherSystem(value, 16);
+                }
+              },
+              decoration: InputDecoration(
+                hintText: "Octal",
               ),
-              TextField(
-                controller: decimal,
-                onChanged: (value) {
-                  if (searchFunction(value, '.')) {
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: decimal,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
+              ],
+              onChanged: (value) {
+                if (searchFunction(value, '.')) {
+                  if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = decimalFraction(value, 2);
                     octal.text = decimalFraction(value, 8);
                     hexadecimal.text = decimalFraction(value, 16);
                   }
-                  else if (value == ""){
-                    binary.text = "";
-                    octal.text = "";
-                    hexadecimal.text = "";
-
-                  }
-                  else {
-                    binary.text = decimalToOtherSystem(value, 2);
-                    octal.text = decimalToOtherSystem(value, 8);
-                    hexadecimal.text = decimalToOtherSystem(value, 16);
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: "Decimal",
-                ),
+                } else if (value == "") {
+                  binary.text = "";
+                  octal.text = "";
+                  hexadecimal.text = "";
+                } else {
+                  binary.text = decimalToOtherSystem(value, 2);
+                  octal.text = decimalToOtherSystem(value, 8);
+                  hexadecimal.text = decimalToOtherSystem(value, 16);
+                }
+              },
+              decoration: InputDecoration(
+                hintText: "Decimal",
               ),
-              TextField(
-                controller: hexadecimal,
-                onChanged: (value) {
-
-                  if (searchFunction(value, '.')) {
-
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: hexadecimal,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9a-fA-F]*\.?[0-9a-fA-F]*')),
+              ],
+              onChanged: (value) {
+                hexadecimal.value = TextEditingValue(
+                  text: value.toUpperCase(),
+                  selection: hexadecimal.selection
+                );
+                if (searchFunction(value, '.')) {
+                  if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = hexadecimalFraction(value, 2);
                     octal.text = hexadecimalFraction(value, 8);
                     decimal.text = hexadecimalFraction(value, 10);
                   }
-                  else if (value == ""){
-                    binary.text = "";
-                    octal.text = "";
-                    decimal.text = "";
-                  }
-                  else {
-                    binary.text = hexadecimalToOtherSystem(value, 2);
-                    octal.text = hexadecimalToOtherSystem(value, 8);
-                    decimal.text = hexadecimalToOtherSystem(value, 10);
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: "Hexadecimal",
-                ),
-              )
-
-
-
-            ],
-          ),
-        )
-      ),
+                } else if (value == "") {
+                  binary.text = "";
+                  octal.text = "";
+                  decimal.text = "";
+                } else {
+                  binary.text = hexadecimalToOtherSystem(value, 2);
+                  octal.text = hexadecimalToOtherSystem(value, 8);
+                  decimal.text = hexadecimalToOtherSystem(value, 10);
+                }
+              },
+              decoration: InputDecoration(
+                hintText: "Hexadecimal",
+              ),
+            )
+          ],
+        ),
+      )),
     );
   }
-
 }

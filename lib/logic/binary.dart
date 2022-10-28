@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'funcions.dart';
 
-
 String binaryToOtherSystem(String binary, int base) {
   int decimal_of_binary = int.parse('$binary', radix: 2);
   if (base == 8)

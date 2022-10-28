@@ -14,11 +14,23 @@ bool searchFunction(String myString, String searchValue) {
 
 String octalMaker(String oct) {
   if (oct.length % 3 == 0) {
-    oct = oct;
+    return oct;
   } else {
     while (oct.length % 3 != 0) {
-      oct = oct + "0";
+      oct = "${oct}0";
     }
   }
   return oct;
 }
+
+String hexaMaker(String hexa) {
+  if (hexa.length % 4 == 0) {
+    return hexa;
+  } else {
+    while (hexa.length % 4 != 0) {
+      hexa = "${hexa}0";
+    }
+  }
+  return hexa;
+}
+
