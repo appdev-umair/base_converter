@@ -10,14 +10,15 @@ String hexadecimalToOtherSystem(String hex, int base) {
 
 String hexadecimalFraction(String hex, int base) {
   String hexFraction = hex.substring(hex.indexOf('.') + 1, hex.length);
-  String bin = "";
+  String binFrac = "";
   hex = hex.substring(0, hex.indexOf('.'));
   for (var i = 0; i < hexFraction.length; i++) {
-    bin +=
+    binFrac +=
         int.parse(hexFraction[i], radix: 16).toRadixString(2).padLeft(4, '0');
   }
-  while (bin[bin.length - 1] != '1') {
-    bin = bin.substring(0, bin.length - 1);
+  while (binFrac[binFrac.length - 1] != '1') {
+    binFrac = binFrac.substring(0, binFrac.length - 1);
   }
-  return binaryFraction(hexadecimalToOtherSystem(hex, 2) + '.' + bin, base);
+  String binWhole = hexadecimalToOtherSystem(hex, 2);
+  return binaryFraction(binWhole + '.' + binFrac, base);
 }

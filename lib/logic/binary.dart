@@ -18,22 +18,22 @@ String binaryFraction(String binary, int base) {
   String bin = binary.substring(0, binary.indexOf('.'));
   double num = 0.0;
   if (base == 10) {
-    for (int i = 1; i <= binaryFraction.length; i++) {
+    for (int i = 1; i <= binaryFraction.length && num < 0.9999999999999999; i++) {
       if (binaryFraction[i - 1] == '0') {
         continue;
       } else {
         num = pow(1 / 2, i) + num;
       }
     }
-  } else if (base == 2)
+  } else if (base == 2) {
     return binary;
-  else if (base == 8) {
+  } else if (base == 8) {
     String octa = "";
     binaryFraction = octalMaker(binaryFraction);
     for (int i = 0; i < binaryFraction.length; i += 3) {
       octa += binaryToOtherSystem(binaryFraction.substring(i, i + 3), 10);
     }
-    return binaryToOtherSystem(bin, base) + '.' + octa;
+    return octa;
   } else if (base == 16) {
     String hexa = "";
     if (binaryFraction.length % 4 == 0) {
@@ -50,7 +50,7 @@ String binaryFraction(String binary, int base) {
           .toRadixString(16)
           .toUpperCase();
     }
-    return binaryToOtherSystem(bin, base) + '.' + hexa;
+    return hexa;
   }
 
   String nums = num.toString();

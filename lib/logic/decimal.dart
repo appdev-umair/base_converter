@@ -20,7 +20,7 @@ String decimalFraction(String decimal, int base) {
       binDig += int.parse(dig).toRadixString(16).toUpperCase();
     } else
       binDig += dig;
-    if (binDig.length == 10) {
+    if (binDig.length == 16) {
       break;
     }
   } while (frac != 0);

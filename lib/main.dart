@@ -36,7 +36,13 @@ class _ConverterState extends State<Converter> {
   var decimal = TextEditingController();
   var hexadecimal = TextEditingController();
   var binary = TextEditingController();
+  var len = 100;
 
+  void lengthChange(int leng){
+    setState(() {
+      len = leng;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,18 +56,34 @@ class _ConverterState extends State<Converter> {
           children: [
             TextField(
               controller: binary,
+              style: TextStyle(
+                fontSize: 25
+              ),
               decoration: InputDecoration(
                 hintText: "Binary",
+                filled: true,
               ),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^[0-1]*\.?[0-1]*')),
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-1]*\.?[0-1]{0,64}')),
               ],
               onChanged: (value) {
+
                 if (searchFunction(value, '.')) {
+
                   if (value[value.indexOf('.')] != value[value.length - 1]) {
-                    octal.text = binaryFraction(value, 8);
+                    if(binaryFraction(value, 8).length >= 16){
+                      octal.text = binaryToOtherSystem(value.substring(0, value.indexOf('.')), 8) + '.' + binaryFraction(value, 8).substring(0, 16);
+                    }
+                    else{
+                      octal.text = binaryToOtherSystem(value.substring(0, value.indexOf('.')), 8) + '.' + binaryFraction(value, 8);
+                    }
                     decimal.text = binaryFraction(value, 10);
-                    hexadecimal.text = binaryFraction(value, 16);
+                    if(binaryFraction(value, 16).length >= 16){
+                      hexadecimal.text = binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16) + '.' + binaryFraction(value, 16).substring(0, 16);
+                    }
+                    else{
+                      hexadecimal.text = binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16) + '.' + binaryFraction(value, 16);
+                    }
                   }
                 } else if (value == "") {
                   octal.text = "";
@@ -78,15 +100,18 @@ class _ConverterState extends State<Converter> {
             TextField(
               controller: octal,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^[0-7]*\.?[0-7]*')),
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-7]*\.?[0-7]{0,24}')),
               ],
+              style: TextStyle(
+                  fontSize: 25
+              ),
               onChanged: (value) {
                 if (searchFunction(value, '.')) {
-                  // if (value[value.indexOf('.')] != value[value.length - 1]) {
+                  if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = octalFraction(value, 2);
                     decimal.text = octalFraction(value, 10);
-                    hexadecimal.text = octalFraction(value, 16);
-                  // }
+                    hexadecimal.text = octalToOtherSystem(value.substring(0, value.indexOf('.')), 16) + '.' + octalFraction(value, 16);
+                  }
                 } else if (value == "") {
                   binary.text = "";
                   decimal.text = "";
@@ -99,20 +124,29 @@ class _ConverterState extends State<Converter> {
               },
               decoration: InputDecoration(
                 hintText: "Octal",
+                filled: true,
               ),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: decimal,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]{0,16}')),
               ],
+              style: TextStyle(
+                  fontSize: 25
+              ),
               onChanged: (value) {
                 if (searchFunction(value, '.')) {
                   if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = decimalFraction(value, 2);
                     octal.text = decimalFraction(value, 8);
                     hexadecimal.text = decimalFraction(value, 16);
+                  }
+                  else{
+                    binary.text = decimalToOtherSystem(value.substring(0, value.indexOf('.')), 2);
+                    octal.text = decimalToOtherSystem(value.substring(0, value.indexOf('.')), 8);
+                    hexadecimal.text = decimalToOtherSystem(value.substring(0, value.indexOf('.')), 16);
                   }
                 } else if (value == "") {
                   binary.text = "";
@@ -126,13 +160,19 @@ class _ConverterState extends State<Converter> {
               },
               decoration: InputDecoration(
                 hintText: "Decimal",
+                filled: true,
               ),
+
               keyboardType: TextInputType.number,
             ),
             TextField(
+
+              style: TextStyle(
+                  fontSize: 25
+              ),
               controller: hexadecimal,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^[0-9a-fA-F]*\.?[0-9a-fA-F]*')),
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9a-fA-F]*\.?[0-9a-fA-F]{0,16}')),
               ],
               onChanged: (value) {
                 hexadecimal.value = TextEditingValue(
@@ -142,8 +182,13 @@ class _ConverterState extends State<Converter> {
                 if (searchFunction(value, '.')) {
                   if (value[value.indexOf('.')] != value[value.length - 1]) {
                     binary.text = hexadecimalFraction(value, 2);
-                    octal.text = hexadecimalFraction(value, 8);
+                    octal.text = hexadecimalToOtherSystem(value.substring(0, value.indexOf('.')), 8) + '.' + hexadecimalFraction(value, 8);
                     decimal.text = hexadecimalFraction(value, 10);
+                  }
+                  else{
+                    binary.text = hexadecimalToOtherSystem(value.substring(0, value.indexOf('.')), 2);
+                    octal.text = hexadecimalToOtherSystem(value.substring(0, value.indexOf('.')), 8);
+                    decimal.text = hexadecimalToOtherSystem(value.substring(0, value.indexOf('.')), 10);
                   }
                 } else if (value == "") {
                   binary.text = "";
@@ -157,7 +202,9 @@ class _ConverterState extends State<Converter> {
               },
               decoration: InputDecoration(
                 hintText: "Hexadecimal",
+                filled: true,
               ),
+
             )
           ],
         ),
