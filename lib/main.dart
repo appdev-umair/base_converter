@@ -1,10 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:splashscreen/splashscreen.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'logic/binary.dart';
 import 'logic/decimal.dart';
 import 'logic/funcions.dart';
@@ -15,18 +12,24 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
-      home: Splash(),
+      home: const Splash(),
     );
   }
 }
+
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
 
@@ -38,21 +41,15 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1),
-            ()=>Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) =>
-                Converter()
-            )
-        )
-    );
+    Timer(
+        Duration(seconds: 1),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Converter())));
   }
 
   Widget build(BuildContext context) {
     return Container(
-      child: Image.asset('assets/images/logo.png'),
-      color: Color(0xFF6C60FF)
-    );
+        child: Image.asset('assets/images/logo.png'), color: Color(0xFF6C60FF));
   }
 }
 
@@ -69,8 +66,7 @@ class _ConverterState extends State<Converter> {
   var hexadecimal = TextEditingController();
   var binary = TextEditingController();
   var len = 100;
-
-  void lengthChange(int leng) {
+    void lengthChange(int leng) {
     setState(() {
       len = leng;
     });
@@ -80,22 +76,25 @@ class _ConverterState extends State<Converter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF6C60FF),
         title: Text("Base Converter"),
-        actions: [Container(
-          margin: EdgeInsets.only(right: 8),
-          child: IconButton(onPressed: () {
-            binary.text = "";
-            octal.text = "";
-            decimal.text = "";
-            hexadecimal.text = "";
-          },
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            splashRadius: 20,
-            icon: Icon(Icons.refresh),
+        actions: [
 
-          ),
-        )
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: IconButton(
+              onPressed: () {
+                binary.text = "";
+                octal.text = "";
+                decimal.text = "";
+                hexadecimal.text = "";
+              },
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              splashRadius: 20,
+              icon: Icon(Icons.refresh),
+            ),
+          )
         ],
       ),
       body: Center(
@@ -111,12 +110,13 @@ class _ConverterState extends State<Converter> {
                 decoration: InputDecoration(
                     filled: true,
                     labelText: "Binary",
+                    floatingLabelStyle: TextStyle(color: Color(0xFF6C60FF)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: Colors.grey)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(color: Colors.blueAccent))),
+                        borderSide: BorderSide(color: Color(0xFF6C60FF)))),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
                       RegExp(r'^[0-1]*\.?[0-1]{0,64}')),
@@ -159,6 +159,8 @@ class _ConverterState extends State<Converter> {
                   }
                 },
                 keyboardType: TextInputType.number,
+                cursorColor: Color(0xFF6C60FF),
+
               ),
             ),
             Container(
@@ -192,14 +194,17 @@ class _ConverterState extends State<Converter> {
                 },
                 decoration: InputDecoration(
                     labelText: "Octal",
+                    floatingLabelStyle: TextStyle(color: Color(0xFF6C60FF)),
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: Colors.grey)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(color: Colors.blueAccent))),
+                        borderSide: BorderSide(color: Color(0xFF6C60FF)))),
                 keyboardType: TextInputType.number,
+                cursorColor: Color(0xFF6C60FF),
+
               ),
             ),
             Container(
@@ -241,11 +246,14 @@ class _ConverterState extends State<Converter> {
                       borderSide: BorderSide(color: Colors.grey)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.blueAccent)),
+                      borderSide: BorderSide(color: Color(0xFF6C60FF))),
                   labelText: "Decimal",
+                  floatingLabelStyle: TextStyle(color: Color(0xFF6C60FF)),
                   filled: true,
                 ),
                 keyboardType: TextInputType.number,
+                cursorColor: Color(0xFF6C60FF),
+
               ),
             ),
             Container(
@@ -289,13 +297,15 @@ class _ConverterState extends State<Converter> {
                 },
                 decoration: InputDecoration(
                     labelText: "Hexadecimal",
+                    floatingLabelStyle: TextStyle(color: Color(0xFF6C60FF)),
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: Colors.grey)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(color: Colors.blueAccent))),
+                        borderSide: BorderSide(color: Color(0xFF6C60FF)))),
+                cursorColor: Color(0xFF6C60FF),
               ),
             ),
           ],
