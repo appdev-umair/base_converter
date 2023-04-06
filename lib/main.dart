@@ -108,10 +108,10 @@ class _ConverterState extends State<Converter> {
                             decimal.text = binaryFraction(value, 10);
                             if (binaryFraction(value, 16).length >= 16) {
                               hexadecimal.text =
-                                  '${binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${binaryFraction(value, 16).substring(0, 16)}';
+                                  '${binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${binaryFraction(value, 16).substring(0, 16).toUpperCase()}';
                             } else {
                               hexadecimal.text =
-                                  '${binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${binaryFraction(value, 16)}';
+                                  '${binaryToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${binaryFraction(value, 16).toUpperCase()}';
                             }
                           }
                         } else if (value == "") {
@@ -121,7 +121,8 @@ class _ConverterState extends State<Converter> {
                         } else {
                           octal.text = binaryToOtherSystem(value, 8);
                           decimal.text = binaryToOtherSystem(value, 10);
-                          hexadecimal.text = binaryToOtherSystem(value, 16);
+                          hexadecimal.text =
+                              binaryToOtherSystem(value, 16).toUpperCase();
                         }
                       },
                       keyboardType: TextInputType.number,
@@ -145,7 +146,7 @@ class _ConverterState extends State<Converter> {
                             binary.text = octalFraction(value, 2);
                             decimal.text = octalFraction(value, 10);
                             hexadecimal.text =
-                                '${octalToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${octalFraction(value, 16)}';
+                                '${octalToOtherSystem(value.substring(0, value.indexOf('.')), 16)}.${octalFraction(value, 16).toUpperCase()}';
                           }
                         } else if (value == "") {
                           binary.text = "";
@@ -154,7 +155,8 @@ class _ConverterState extends State<Converter> {
                         } else {
                           binary.text = octalToOtherSystem(value, 2);
                           decimal.text = octalToOtherSystem(value, 10);
-                          hexadecimal.text = octalToOtherSystem(value, 16);
+                          hexadecimal.text =
+                              octalToOtherSystem(value, 16).toUpperCase();
                         }
                       },
                       decoration: InputDecoration(
@@ -183,14 +185,16 @@ class _ConverterState extends State<Converter> {
                               value[value.length - 1]) {
                             binary.text = decimalFraction(value, 2);
                             octal.text = decimalFraction(value, 8);
-                            hexadecimal.text = decimalFraction(value, 16);
+                            hexadecimal.text =
+                                decimalFraction(value, 16).toUpperCase();
                           } else {
                             binary.text = decimalToOtherSystem(
                                 value.substring(0, value.indexOf('.')), 2);
                             octal.text = decimalToOtherSystem(
                                 value.substring(0, value.indexOf('.')), 8);
                             hexadecimal.text = decimalToOtherSystem(
-                                value.substring(0, value.indexOf('.')), 16);
+                                    value.substring(0, value.indexOf('.')), 16)
+                                .toUpperCase();
                           }
                         } else if (value == "") {
                           binary.text = "";
@@ -199,7 +203,8 @@ class _ConverterState extends State<Converter> {
                         } else {
                           binary.text = decimalToOtherSystem(value, 2);
                           octal.text = decimalToOtherSystem(value, 8);
-                          hexadecimal.text = decimalToOtherSystem(value, 16);
+                          hexadecimal.text =
+                              decimalToOtherSystem(value, 16).toUpperCase();
                         }
                       },
                       decoration: InputDecoration(
